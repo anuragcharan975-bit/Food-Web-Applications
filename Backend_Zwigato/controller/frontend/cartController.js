@@ -33,6 +33,17 @@ const addToCart = async (req, res) => {
   try {
     const { food, quantity } = req.body;
 
+    const Food = require("../../model/food");
+    const foodItem = await Food.findById(food);
+    
+    if (!foodItem) {
+      return res.status(404).json({ success: false, message: "Food item not found" });
+    }
+    
+    if (foodItem.available === false) {
+      return res.status(400).json({ success: false, message: "Sorry, this product is currently not available." });
+    }
+
     const cart = await Cart.create({
       user: req.params.userId,
       food,

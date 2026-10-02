@@ -54,7 +54,10 @@ export default function AdminLayout() {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: '#f5f5f5' }}>
         <div style={{ background: 'white', padding: '40px', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '400px' }}>
-          <h2 style={{ textAlign: 'center', color: 'var(--primary)', marginBottom: '20px' }}>Zwigato Admin</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <img src="/logo_icon.jpg" alt="Zwigato Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            <h2 style={{ margin: 0, color: 'var(--primary)' }}>Zwigato Admin</h2>
+          </div>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <input 
               type="email" 
@@ -96,7 +99,7 @@ export default function AdminLayout() {
       {/* Admin Topbar */}
       <div style={{ height: '60px', background: 'white', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 30px', zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <span style={{ fontSize: '24px' }}>🍔</span>
+          <img src="/logo_icon.jpg" alt="Zwigato Logo" style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
           <h2 style={{ margin: 0, color: 'var(--primary)', fontSize: '20px' }}>Zwigato Admin</h2>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -172,11 +175,11 @@ function Dashboard() {
     const fetchData = async () => {
       try {
         const [usersRes, foodsRes, restsRes, catsRes, ordersRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/users/viewall`).then(r => r.json()),
+          fetch(`http://localhost:5000/admin/users/viewall`).then(r => r.json()),
           fetch(`${API_BASE_URL}/foods/viewall`).then(r => r.json()),
           fetch(`${API_BASE_URL}/restaurants/viewall`).then(r => r.json()),
           fetch(`${API_BASE_URL}/categories/viewall`).then(r => r.json()),
-          fetch(`${API_BASE_URL}/orders/viewall`).then(r => r.json()),
+          fetch(`http://localhost:5000/admin/orders/viewall`).then(r => r.json()),
         ]);
 
         const orders = ordersRes.data || [];
@@ -275,7 +278,7 @@ function AdminOrders() {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/orders/viewall`);
+      const res = await fetch(`http://localhost:5000/admin/orders/viewall`);
       const data = await res.json();
       if (data.success) setOrders(data.data);
     } catch (e) { }
@@ -283,7 +286,7 @@ function AdminOrders() {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await fetch(`${API_BASE_URL}/orders/update${orderId}`, {
+      await fetch(`http://localhost:5000/admin/orders/update${orderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderStatus: newStatus })
@@ -440,6 +443,23 @@ function AdminFoods() {
       const data = await res.json();
       if (data.success) setRestaurants(data.data);
     } catch (e) { }
+  };
+
+
+  const toggleFoodStatus = async (id) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/foods/status/${id}`, { method: 'PUT' });
+      const data = await res.json();
+      if (data.success) {
+        // Optional: show toast, but we'll just refetch foods
+        fetchFoods();
+      } else {
+        alert(data.message || "Failed to toggle status");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error toggling status");
+    }
   };
 
   const deleteFood = async (id) => {
@@ -924,7 +944,7 @@ function AdminUsers() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/users/viewall`);
+      const res = await fetch(`http://localhost:5000/admin/users/viewall`);
       const data = await res.json();
       if (data.success) setUsers(data.data);
     } catch (e) { }
@@ -933,7 +953,7 @@ function AdminUsers() {
   const handleCreateAdmin = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`${API_BASE_URL}/auth/create`, {
+      const res = await fetch(`http://localhost:5000/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(adminData)

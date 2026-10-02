@@ -15,7 +15,7 @@ const API_BASE_URL = "http://localhost:5000/api";
 const SAMPLE_CATEGORIES = [
   { _id: "cat_all", name: "All Dishes", image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150&auto=format&fit=crop&q=80" },
   { _id: "cat_pizza", name: "Pizza", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=150&auto=format&fit=crop&q=80" },
-  { _id: "cat_burger", name: "Burger", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=150&auto=format&fit=crop&q=80" },
+  { _id: "cat_burger", name: "Burger", image: (typeof window !== 'undefined' ? window.location.origin : '') + "/realistic_burger.jpg" },
   { _id: "cat_biryani", name: "Biryani", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=150&auto=format&fit=crop&q=80" },
   { _id: "cat_north", name: "North Indian", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=150&auto=format&fit=crop&q=80" },
   { _id: "cat_chinese", name: "Chinese", image: "https://images.unsplash.com/photo-1585032226651-759b368d7246?w=150&auto=format&fit=crop&q=80" },
@@ -85,7 +85,7 @@ const SAMPLE_FOODS = [
     type: "Veg",
     category: { _id: "cat_burger", name: "Burger" },
     restaurant: { _id: "res_3", name: "Burger Craft House" },
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=80",
+    image: (typeof window !== 'undefined' ? window.location.origin : '') + "/realistic_burger.jpg",
     available: true
   },
   {
@@ -350,6 +350,21 @@ async function fetchOrders(userId) {
 }
 
 /**
+ * Fetch Single Order By ID
+ */
+async function fetchOrderById(userId, orderId) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders/${userId}/${orderId}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("Backend offline");
+    const json = await res.json();
+    return json;
+  } catch (error) {
+    console.log("Error fetching order details:", error.message);
+    return { success: false, message: error.message };
+  }
+}
+
+/**
  * Update User Profile
  */
 async function apiUpdateUser(userId, userData) {
@@ -429,4 +444,21 @@ async function fetchRestaurantById(id) {
   return SAMPLE_RESTAURANTS.find(r => r._id === id) || null;
 }
 
-export { fetchFoods, fetchCategories, fetchRestaurants, fetchBanners, apiLogin, apiRegister, apiPlaceOrder, fetchOrders, apiUpdateUser, apiForgotPassword, apiVerifyOtp, apiResetPassword, fetchRestaurantById };
+
+/**
+ * Verify Razorpay Payment
+ */
+async function apiVerifyPayment(paymentData) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/orders/verify-payment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(paymentData)
+    });
+    return await res.json();
+  } catch (error) {
+    return { success: false, message: "Server error" };
+  }
+}
+
+export { fetchFoods, fetchCategories, fetchRestaurants, fetchBanners, apiLogin, apiRegister, apiPlaceOrder, apiVerifyPayment, fetchOrders, fetchOrderById, apiUpdateUser, apiForgotPassword, apiVerifyOtp, apiResetPassword, fetchRestaurantById };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getRestaurantImageUrl } from '../utils/imageUtils';
 
 export default function RestaurantGrid({ restaurants }) {
   if (!restaurants || restaurants.length === 0) return null;
@@ -17,7 +18,7 @@ export default function RestaurantGrid({ restaurants }) {
               <div className="restaurant-card">
                 <div className="restaurant-img-wrap">
                   <img 
-                    src={res.image?.startsWith('http') ? res.image : (res.image ? `http://localhost:5000/uploads/${res.image}` : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500')} 
+                    src={getRestaurantImageUrl(res.image)} 
                     alt={res.name} 
                     className="restaurant-img" 
                   />

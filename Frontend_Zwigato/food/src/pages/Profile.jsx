@@ -8,7 +8,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedOrder, setSelectedOrder] = useState(null);
   
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState('');
@@ -108,7 +107,7 @@ export default function Profile() {
         </div>
       )}
 
-      <h3 style={{ fontSize: '22px', marginBottom: '20px', color: 'var(--secondary)' }}>Order History</h3>
+      <h3 style={{ fontSize: '22px', marginBottom: '20px', color: 'var(--secondary)' }}>My Orders</h3>
       
       {loading ? (
         <p>Loading orders...</p>
@@ -148,7 +147,7 @@ export default function Profile() {
                 </div>
                 <br/>
                 <button 
-                  onClick={() => setSelectedOrder(order)}
+                  onClick={() => navigate(`/profile/orders/${order._id}`)}
                   style={{ padding: '10px 18px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 'bold' }}
                 >
                   View Details
@@ -159,42 +158,6 @@ export default function Profile() {
         </div>
       )}
 
-      {selectedOrder && (
-        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div style={{ background: 'white', width: '100%', maxWidth: '600px', borderRadius: 'var(--radius-md)', padding: '30px', maxHeight: '90vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <h3 style={{ margin: 0, fontSize: '24px', color: 'var(--secondary)' }}>Order Details</h3>
-              <button onClick={() => setSelectedOrder(null)} style={{ border: 'none', background: '#f1f5f9', width: '36px', height: '36px', borderRadius: '50%', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-            </div>
-            
-            <div style={{ marginBottom: '24px', padding: '20px', background: '#f8fafc', borderRadius: 'var(--radius-sm)' }}>
-              <p style={{ margin: '0 0 8px 0' }}><strong>Order ID:</strong> {selectedOrder._id}</p>
-              <p style={{ margin: '0 0 8px 0' }}><strong>Date:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
-              <p style={{ margin: '0 0 8px 0' }}><strong>Status:</strong> <span style={{ fontWeight: 'bold', color: 'var(--primary)' }}>{selectedOrder.orderStatus}</span></p>
-              <p style={{ margin: '0 0 8px 0' }}><strong>Payment Status:</strong> {selectedOrder.paymentStatus}</p>
-              <p style={{ margin: 0 }}><strong>Address:</strong> {selectedOrder.address?.city || 'Jaipur'}</p>
-            </div>
-
-            <h4 style={{ marginBottom: '16px', fontSize: '18px', color: 'var(--secondary)' }}>Items</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
-              {selectedOrder.items.map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
-                  <div>
-                    <div style={{ fontWeight: '600', color: 'var(--secondary)' }}>{item.food?.name || 'Food Item'}</div>
-                    <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>Qty: {item.quantity} x ₹{item.price}</div>
-                  </div>
-                  <div style={{ fontWeight: '700', color: 'var(--secondary)' }}>₹{item.price * item.quantity}</div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '800', fontSize: '20px', color: 'var(--secondary)', borderTop: '2px solid #f1f5f9', paddingTop: '20px' }}>
-              <span>Total Amount</span>
-              <span>₹{selectedOrder.totalAmount}</span>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

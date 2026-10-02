@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
+import { getFoodImageUrl } from '../utils/imageUtils';
 
 export default function FoodCard({ food }) {
   const { cart, addToCart, changeQuantity, wishlist, toggleWishlist } = useContext(AppContext);
@@ -13,7 +14,7 @@ export default function FoodCard({ food }) {
     <div className="food-card">
       <div className="food-img-container">
         <img 
-          src={food.image?.startsWith('http') ? food.image : (food.image ? `http://localhost:5000/uploads/${food.image}` : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500')} 
+          src={getFoodImageUrl(food.image)} 
           alt={food.name} 
           className="food-img" 
         />

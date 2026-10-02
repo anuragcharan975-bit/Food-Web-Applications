@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { fetchRestaurantById, fetchFoods } from '../services/api';
+import { getFoodImageUrl, getRestaurantImageUrl } from '../utils/imageUtils';
 
 export default function RestaurantDetails() {
   const { id } = useParams();
@@ -58,18 +59,7 @@ export default function RestaurantDetails() {
     return matchSearch && matchVeg;
   });
 
-  // Fix image URL resolution
-  const getImageUrl = (img) => {
-    if (!img) return 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200';
-    if (img.startsWith('http')) return img;
-    return `http://localhost:5000/uploads/${img}`;
-  };
-
-  const getFoodImageUrl = (img) => {
-    if (!img) return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500';
-    if (img.startsWith('http')) return img;
-    return `http://localhost:5000/uploads/${img}`;
-  };
+  const getImageUrl = getRestaurantImageUrl;
 
   const mapQuery = (restaurant.latitude && restaurant.longitude) 
     ? `${restaurant.latitude},${restaurant.longitude}` 

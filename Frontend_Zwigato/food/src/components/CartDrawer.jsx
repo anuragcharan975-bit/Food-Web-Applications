@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import { apiPlaceOrder } from '../services/api';
+import { getFoodImageUrl } from '../utils/imageUtils';
 
 export default function CartDrawer() {
   const { cart, isCartOpen, setIsCartOpen, changeQuantity, currentUser, clearCart, showToast } = useContext(AppContext);
@@ -27,38 +29,18 @@ export default function CartDrawer() {
     }
   };
 
-  const handleCheckout = async () => {
+  
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
     if (cart.length === 0) {
       showToast("Your cart is empty!", "error");
       return;
     }
-
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const delivery = subtotal > 300 ? 0 : 35;
-    const finalTotal = subtotal + delivery - appliedCouponDiscount;
-
-    const orderData = {
-      userId: currentUser ? currentUser._id : "guest_user",
-      items: cart,
-      totalAmount: finalTotal,
-      deliveryAddress: "C-Scheme, Jaipur",
-      paymentMethod: "Cash on Delivery"
-    };
-
-    const result = await apiPlaceOrder(orderData);
     
-    clearCart();
-    setAppliedCouponDiscount(0);
-    setCouponCode('');
+    // Just navigate to checkout page
     closeCart();
-
-    alert(
-      `🎉 ORDER CONFIRMED!\n\n` +
-      `Order ID: ${result.orderId || "ZWG-849201"}\n` +
-      `Amount: ₹${finalTotal}\n` +
-      `Delivery in: 25-35 Minutes\n\n` +
-      `Thank you for ordering with Zwigato!`
-    );
+    navigate('/checkout', { state: { appliedCouponDiscount, couponCode } });
   };
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -89,7 +71,7 @@ export default function CartDrawer() {
           ) : (
             cart.map((item) => (
               <div key={item.foodId} className="cart-item">
-                <img src={item.image?.startsWith('http') ? item.image : (item.image ? `http://localhost:5000/uploads/${item.image}` : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100')} 
+                <img src={getFoodImageUrl(item.image)} 
                      alt={item.name} className="cart-item-img" />
                 <div className="cart-item-details">
                   <div className="cart-item-title">{item.name}</div>

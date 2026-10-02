@@ -56,8 +56,14 @@ const createOrder = (req, res, next) => {
   next();
 };
 
+const updateOrderSchema = Joi.object({
+  orderStatus: Joi.string().valid("Placed", "Preparing", "Out For Delivery", "Delivered", "Cancelled"),
+  paymentStatus: Joi.string().valid("Pending", "Paid", "Failed"),
+  paymentMethod: Joi.string().valid("COD", "Online")
+}).unknown(true);
+
 const updateOrder = (req, res, next) => {
-  const { error } = orderSchema.validate(req.body);
+  const { error } = updateOrderSchema.validate(req.body);
 
   if (error) {
     return res.status(400).json({

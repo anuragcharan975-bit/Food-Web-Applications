@@ -9,11 +9,25 @@ import Home from './pages/Home';
 import { fetchBanners, fetchCategories, fetchRestaurants, fetchFoods } from './services/api';
 
 import { Routes, Route, useLocation } from 'react-router-dom';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
 import Profile from './pages/Profile';
+import OrderDetails from './pages/OrderDetails';
 import AdminLayout from './components/AdminLayout';
 import AllFoods from './pages/AllFoods';
 import AllRestaurants from './pages/AllRestaurants';
 import RestaurantDetails from './pages/RestaurantDetails';
+import About from './pages/About';
+import Team from './pages/Team';
+import Careers from './pages/Careers';
+import Blog from './pages/Blog';
+import Support from './pages/Support';
+import Partner from './pages/Partner';
+import Ride from './pages/Ride';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import CookiePolicy from './pages/CookiePolicy';
+
 
 function AppContent() {
   const [banners, setBanners] = useState([]);
@@ -99,7 +113,21 @@ function AppContent() {
         } />
         <Route path="/restaurant/:id" element={<RestaurantDetails />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/orders/:id" element={<OrderDetails />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
         <Route path="/admin/*" element={<AdminLayout />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/support" element={<Support />} />
+        <Route path="/partner" element={<Partner />} />
+        <Route path="/ride" element={<Ride />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/cookie-policy" element={<CookiePolicy />} />
+
       </Routes>
       {!isAdminRoute && (
         <>

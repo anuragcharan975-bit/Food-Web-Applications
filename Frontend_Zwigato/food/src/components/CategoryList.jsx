@@ -1,4 +1,5 @@
 import React from 'react';
+import { getCategoryImageUrl } from '../utils/imageUtils';
 
 export default function CategoryList({ categories, selectedCategoryId, setSelectedCategoryId }) {
   if (!categories || categories.length === 0) return null;
@@ -19,7 +20,7 @@ export default function CategoryList({ categories, selectedCategoryId, setSelect
             >
               <div className="category-img-wrap">
                 <img 
-                  src={cat.image?.startsWith('http') ? cat.image : (cat.image ? `http://localhost:5000/uploads/${cat.image}` : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150')} 
+                  src={getCategoryImageUrl(cat.image)} 
                   alt={cat.name} 
                   className="category-img" 
                 />

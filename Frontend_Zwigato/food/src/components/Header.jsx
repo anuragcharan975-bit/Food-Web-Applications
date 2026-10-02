@@ -29,7 +29,7 @@ export default function Header({ currentSearch, setCurrentSearch }) {
         {/* Brand Logo & Location */}
         <div className="logo-area">
           <Link to="/" className="brand-logo" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <span className="brand-icon">🍔</span>
+            <img src="/logo_icon.jpg" alt="Zwigato Logo" style={{ width: '32px', height: '32px', objectFit: 'contain' }} className="brand-icon" />
             Zwig<span>ato</span>
           </Link>
 

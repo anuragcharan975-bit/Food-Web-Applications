@@ -42,6 +42,29 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
 
+
+    subtotal: {
+      type: Number,
+      default: 0,
+    },
+    deliveryCharge: {
+      type: Number,
+      default: 0,
+    },
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    paymentMethod: {
+      type: String,
+      enum: ["COD", "Online"],
+      required: true,
+      default: "COD",
+    },
+    transactionId: {
+      type: String,
+    },
+
     totalAmount: {
       type: Number,
       required: true,

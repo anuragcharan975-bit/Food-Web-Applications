@@ -7,7 +7,7 @@ import RestaurantGrid from '../components/RestaurantGrid';
 
 export default function Home({ banners, categories, restaurants, foods, currentSearch, isSearching, selectedCategoryId, setSelectedCategoryId, isVegOnly, setIsVegOnly, currentSort, setCurrentSort }) {
   const homeRestaurants = restaurants.slice(0, 8);
-  const homeFoods = foods.slice(0, 8);
+  const homeFoods = (selectedCategoryId === "cat_all" && !currentSearch && !isVegOnly && currentSort === "default") ? foods.slice(0, 8) : foods;
 
   return (
     <main style={{ backgroundColor: 'var(--bg-light)', minHeight: '100vh', paddingBottom: '60px' }}>
